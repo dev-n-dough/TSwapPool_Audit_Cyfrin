@@ -19,12 +19,13 @@ import { IERC20 } from "forge-std/interfaces/IERC20.sol";
 
 contract PoolFactory {
     error PoolFactory__PoolAlreadyExists(address tokenAddress);
+    // written ununsed event should be removed
     error PoolFactory__PoolDoesNotExist(address tokenAddress);
 
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
     //////////////////////////////////////////////////////////////*/
-    mapping(address token => address pool) private s_pools;
+    mapping(address token => address pool) private s_pools; // e any pool consist of a ERC20(poolToken) and WETH
     mapping(address pool => address token) private s_tokens;
 
     address private immutable i_wethToken;
@@ -32,12 +33,14 @@ contract PoolFactory {
     /*//////////////////////////////////////////////////////////////
                                  EVENTS
     //////////////////////////////////////////////////////////////*/
+    // written missing indexing
     event PoolCreated(address tokenAddress, address poolAddress);
 
     /*//////////////////////////////////////////////////////////////
                                FUNCTIONS
     //////////////////////////////////////////////////////////////*/
     constructor(address wethToken) {
+        // written lacks a 0 check
         i_wethToken = wethToken;
     }
 
@@ -48,7 +51,9 @@ contract PoolFactory {
         if (s_pools[tokenAddress] != address(0)) {
             revert PoolFactory__PoolAlreadyExists(tokenAddress);
         }
+        // written what if the name function reverts --> Weird ERC20
         string memory liquidityTokenName = string.concat("T-Swap ", IERC20(tokenAddress).name());
+        // written this should be .symbol , not .name
         string memory liquidityTokenSymbol = string.concat("ts", IERC20(tokenAddress).name());
         TSwapPool tPool = new TSwapPool(tokenAddress, i_wethToken, liquidityTokenName, liquidityTokenSymbol);
         s_pools[tokenAddress] = address(tPool);

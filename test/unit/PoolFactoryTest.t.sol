@@ -29,4 +29,7 @@ contract PoolFactoryTest is Test {
         vm.expectRevert(abi.encodeWithSelector(PoolFactory.PoolFactory__PoolAlreadyExists.selector, address(tokenA)));
         factory.createPool(address(tokenA));
     }
+    // e READ all tests
+
+    
 }
